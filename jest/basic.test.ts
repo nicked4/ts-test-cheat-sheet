@@ -31,6 +31,7 @@ describe('Basic usage', () => {
     expect('Info: dummy log.').toMatch(/^Info:/);
     expect('Info: dummy log.').toMatch(new RegExp('^Info:'));
     expect({ a: 'Info: dummy log' }).toMatchObject({ a: expect.stringMatching(/^Info:/)});
+    expect(new Error('dummy')).toMatchObject(new Error('dummy'));
 
     // Float
     expect(0.1 + 0.2).toBeCloseTo(0.3);
@@ -66,7 +67,22 @@ describe('Basic usage', () => {
     // async/await
     await expect(Promise.resolve('resolved!')).resolves.toBe('resolved!');
     await expect(Promise.reject(new Error('rejected...'))).rejects.toThrow('rejected...');
-  });
 
-  test('Setup and Teardown', () => {});
+    // Other way (without async/await)
+    return expect(Promise.resolve('resolved!')).resolves.toBe('resolved!');
+  });
 });
+
+describe('Setup and Teardown', () => {
+  beforeAll(()  => { 1 });
+  beforeEach(() => { 2 });
+  afterEach(()  => { 4 });
+  afterAll(()   => { 5 });
+
+  test('first', ()  => { 3.1 });
+  test('second', () => { 3.2 });
+  test('third', ()  => { 3.3 });
+});
+
+// Setup and Teardown can be written at the top level
+// beforeAll(()  => { 1 });
