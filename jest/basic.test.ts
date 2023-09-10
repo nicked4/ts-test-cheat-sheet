@@ -85,4 +85,32 @@ describe('Setup and Teardown', () => {
 });
 
 // Setup and Teardown can be written at the top level
+// All duplicated declarations are applied
 // beforeAll(()  => { 1 });
+
+describe('Globals', () => {
+  describe('describe can be written inside describe', () => {});
+
+  test.skip('Skip this test', () => fail('Skipped!'));
+  // describe.only('Exec only this describe', () => {});
+  // test.only('Exec only this test', () => {});
+  test.failing('Failed', () => fail('Passed!'));
+  test.todo('Implement test');
+
+  describe.each([
+    [1, 2, 3],
+    [4, 5, 9],
+    [7, 8, 15],
+  ])('Test table data', (a, b, expected) => {
+    test(`${a} + ${b} = ${expected}`, () => {
+      expect(a + b).toBe(expected);
+    });
+  });
+
+  test.each([
+    {name: 'a', path: 'path/to/a', count: 1, write: true},
+    {name: 'b', path: 'path/to/b', count: 3},
+  ])('inline table', ({name, path, count, write}) => {
+    // arguments are typed as expected, e.g. `write: boolean | undefined`
+  });
+});
